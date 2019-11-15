@@ -1,0 +1,83 @@
+version: '3'
+networks:
+  quorum_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.10.0.0/16
+services:
+  quorum_1:
+    hostname: 172.10.1.1
+    build: ./quorum_cluster/quorum
+    container_name: quorum_election_commision
+    networks:
+      quorum_net:
+        ipv4_address: '172.10.1.1'
+    volumes: 
+      - ./quorum1_data:/quorum
+    environment:
+      - CONSTELLATION_KEY={"data":{"bytes":"K+oYSvXKHsFYX9zkChMIDYSADj9VxBygMqm+t0Ag2l4="},"type":"unlocked"}
+      - CONSTELLATION_PUB=p6m2ZLsWrwUZ40LfkwCI38abGd5SVFIwiKQnrbcOCD4=
+      - NODEKEY=ff4a6ce19fbe31664eabbcece45c8e28d37ecaf889286ce579a53c5f684b437a
+      - ACCOUNTKEY=d55ae7c247804428ca98ed524764d7b3f8f009c4147faac06b97033ecc1b986b
+      - PERMISSIONED_NODES=[ "enode://3024ae995a8ebc594a9e10d859995158670e7f93709bdbffa7e6e2ecf45917fef930d14d43e3c0ac0bd9fd6a0adef5396b18d80fca1a3e91ff1b9631265640e0@172.10.1.1:21000?discport=0&raftport=50401","enode://5734f39f23c3893f598f1c2d2577855bf2fd83983f2b2cd279733e0425ab74499b07879d80085e563a4be6e920da233d34b11f5000f10a90e3a5acb2d27e6cb4@172.10.1.2:21000?discport=0&raftport=50401","enode://21a4c8e08e722a3dd27229017f61c5d3b6ae1e74fe452faba3f1e105829b2b1fa0dca8ee1b2b81fc6b2b75370ee1a081e128d774987fbb231a614165bb8d7e1d@172.10.1.3:21000?discport=0&raftport=50401" ]
+      - CONSTELLATION_NODES=http://172.10.1.1:9001/,http://172.10.1.2:9001/,http://172.10.1.3:9001/
+      - QUORUM_NODE_ADDRESS=172.10.1.1
+      - DOMAIN_NAME=172.10.1.1
+    ports:
+      - 24001:22000
+      - 8546:8546
+      - 9001:9001
+  quorum_2:
+    hostname: 172.10.1.2
+    container_name: quorum_booth1
+    build: ./quorum_cluster/quorum
+    networks:
+      quorum_net:
+        ipv4_address: '172.10.1.2'
+    environment:
+      - CONSTELLATION_KEY={"data":{"bytes":"VWdW9qu2aC/TGBP0oNncOcjaCAHvc04xFdH9ylmovrY="},"type":"unlocked"}
+      - CONSTELLATION_PUB=8QH4amW71rBaqRBYG88RUDb315n/6Uwxu23Z7AJK520=
+      - NODEKEY=61496bc9bff284db113ae22a7fa079ec4c2fc04a98f807d1e2558776a4b9c078
+      - ACCOUNTKEY=3a1076bf45ab87712ad64ccb3b10217737f7faacbf2872e88fdd9a537d8fe266
+      - PERMISSIONED_NODES=[ "enode://3024ae995a8ebc594a9e10d859995158670e7f93709bdbffa7e6e2ecf45917fef930d14d43e3c0ac0bd9fd6a0adef5396b18d80fca1a3e91ff1b9631265640e0@172.10.1.1:21000?discport=0&raftport=50401","enode://5734f39f23c3893f598f1c2d2577855bf2fd83983f2b2cd279733e0425ab74499b07879d80085e563a4be6e920da233d34b11f5000f10a90e3a5acb2d27e6cb4@172.10.1.2:21000?discport=0&raftport=50401","enode://21a4c8e08e722a3dd27229017f61c5d3b6ae1e74fe452faba3f1e105829b2b1fa0dca8ee1b2b81fc6b2b75370ee1a081e128d774987fbb231a614165bb8d7e1d@172.10.1.3:21000?discport=0&raftport=50401" ]
+      - CONSTELLATION_NODES=http://172.10.1.1:9001/,http://172.10.1.2:9001/,http://172.10.1.3:9001/
+      - QUORUM_NODE_ADDRESS=172.10.1.2
+      - DOMAIN_NAME=172.10.1.2
+    ports:
+      - 24002:22000
+      - 8547:8546
+      - 9002:9001
+    volumes: 
+      - ./quorum2_data:/quorum
+  quorum_3:
+    hostname: 172.10.1.3
+    build: ./quorum_cluster/quorum
+    container_name: quorum_booth2
+    networks:
+      quorum_net:
+        ipv4_address: '172.10.1.3'
+    environment:
+      - CONSTELLATION_KEY={"data":{"bytes":"T473CpKHoEFcJ21kJXYEdYDkwD9XCpwrkR4V5L05Xcg="},"type":"unlocked"}
+      - CONSTELLATION_PUB=lP/xh0l1asOZy8hk4LzeTEMrcgNzVWJmLDWVld8mx2U=
+      - NODEKEY=a7f82071bc53ba2d0e7c531de371ee94041131e378652c20fae392d9165c6ea8
+      - ACCOUNTKEY=f2b618b041a197244a655efc055e6753f8b71356fd66e7a1d58d10cc818da334
+      - PERMISSIONED_NODES=[ "enode://3024ae995a8ebc594a9e10d859995158670e7f93709bdbffa7e6e2ecf45917fef930d14d43e3c0ac0bd9fd6a0adef5396b18d80fca1a3e91ff1b9631265640e0@172.10.1.1:21000?discport=0&raftport=50401","enode://5734f39f23c3893f598f1c2d2577855bf2fd83983f2b2cd279733e0425ab74499b07879d80085e563a4be6e920da233d34b11f5000f10a90e3a5acb2d27e6cb4@172.10.1.2:21000?discport=0&raftport=50401","enode://21a4c8e08e722a3dd27229017f61c5d3b6ae1e74fe452faba3f1e105829b2b1fa0dca8ee1b2b81fc6b2b75370ee1a081e128d774987fbb231a614165bb8d7e1d@172.10.1.3:21000?discport=0&raftport=50401" ]
+      - CONSTELLATION_NODES=http://172.10.1.1:9001/,http://172.10.1.2:9001/,http://172.10.1.3:9001/
+      - QUORUM_NODE_ADDRESS=172.10.1.3
+      - DOMAIN_NAME=172.10.1.3
+    ports:
+      - 24003:22000
+    volumes:
+      - ./quorum3_data:/quorum
+  api:
+    build: ./client-api/
+    container_name: api
+    # depends_on:
+    #   - quorum_3
+    networks:
+        quorum_net:
+          ipv4_address: '172.13.1.10'
+    ports:
+        - 8080:8080
