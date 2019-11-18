@@ -17,7 +17,10 @@ contract Election {
         hasVoted[msg.sender] = true;
     }
 
+    //Method to get votes for a party
+    //Only election commission can get votes
     function getVotesFor(uint8 party) public view returns (uint8) {
+        require(msg.sender == election_commision);
         return votes[party];
     }
 }

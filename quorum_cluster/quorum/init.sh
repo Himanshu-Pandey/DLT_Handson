@@ -21,11 +21,13 @@ if [[ ! -e "${QUORUM_DIR}/geth/genesis.json" && ! -d "${QUORUM_DIR}/chaindata" ]
     /usr/local/bin/geth --datadir ${QUORUM_DIR} init ${QUORUM_DIR}/geth/genesis.json
 
     echo "Copying configured accountkey to Quorum data directory ${QUORUM_DIR}"
-    echo ${ACCOUNTKEY} > ${QUORUM_DIR}/accountkey
+    echo ${ACCOUNTKEY1} > ${QUORUM_DIR}/accountkey
+    echo ${ACCOUNTKEY2} > ${QUORUM_DIR}/accountkey1
 
     echo "Importing configured account into Quorum"
     echo "" > ${QUORUM_DIR}/password.txt
     /usr/local/bin/geth account import --datadir ${QUORUM_DIR} --password ${QUORUM_DIR}/password.txt ${QUORUM_DIR}/accountkey
+    /usr/local/bin/geth account import --datadir ${QUORUM_DIR} --password ${QUORUM_DIR}/password.txt ${QUORUM_DIR}/accountkey1
     rm ${QUORUM_DIR}/password.txt
 
     echo "Copying configured nodekey to geth path ${QUORUM_DIR}/geth"
@@ -46,7 +48,6 @@ if [ "$PERMISSIONED_NODES" != "" ]; then
     cp ${QUORUM_DIR}/permissioned-nodes.json ${QUORUM_DIR}/static-nodes.json
     echo "Updated ${QUORUM_DIR}/permissioned-nodes.json and ${QUORUM_DIR}/static-nodes.json from environment variable inputs"
 else
-    echo "adios mafa"
     exit 1
 fi
 

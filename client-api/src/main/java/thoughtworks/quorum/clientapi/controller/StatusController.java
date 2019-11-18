@@ -1,6 +1,5 @@
 package thoughtworks.quorum.clientapi.controller;
 
-import thoughtworks.quorum.clientapi.service.ContractLoader;
 import thoughtworks.quorum.clientapi.service.Web3jService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

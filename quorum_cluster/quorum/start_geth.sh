@@ -18,7 +18,7 @@ if [ -z ${RAFT_ID} ]; then
         --port 21000 \
         --verbosity 5 \
         --nodiscover \
-        --unlock 0 \
+        --unlock "0,1" \
         --password /data/password.txt \
         --gcmode archive
 else
