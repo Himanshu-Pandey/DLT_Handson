@@ -10,18 +10,10 @@ import thoughtworks.quorum.clientapi.service.ContractLoader;
 import java.math.BigInteger;
 
 @RestController
-public class ElectionComissionController {
+public class ElectionCommissionController {
 
     @Autowired
     private ContractLoader contractLoader;
-
-
-    @RequestMapping("/votes/{party}")
-    @GetMapping
-    public ResponseEntity getVotes(@PathVariable Integer party) throws Exception {
-        BigInteger votes = contractLoader.loadContract().getVotesFor(BigInteger.valueOf(party)).send();
-        return ResponseEntity.ok().body(votes);
-    }
 
     @RequestMapping("/winner")
     @GetMapping

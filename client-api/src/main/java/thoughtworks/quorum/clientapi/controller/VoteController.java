@@ -30,7 +30,7 @@ public class VoteController {
         return ResponseEntity.ok(web3jService.getAccounts());
     }
 
-    @RequestMapping("/vote/{party}")
+    @RequestMapping("booth/{boothId}/user/{userId}/vote/{party}")
     @PostMapping
     public ResponseEntity castVote(@PathVariable Integer party) throws Exception {
         TransactionReceipt receipt = contractLoader.loadContract().vote(BigInteger.valueOf(party)).send();
