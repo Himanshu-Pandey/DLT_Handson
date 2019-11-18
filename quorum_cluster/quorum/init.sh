@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e
 
-echo "172.10.1.1     shell.vakt.com" >> /etc/hosts
-echo "172.10.1.2     gunvor.vakt.com" >> /etc/hosts
-
 export QUORUM_DIR="/quorum"
 
 # Only initialise the Quorum data directory if this has not been done before

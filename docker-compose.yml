@@ -9,7 +9,7 @@ networks:
 services:
   quorum_1:
     hostname: 172.10.1.1
-    build: ./quorum_cluster/quorum
+    image: dockeronetwothree/quorum_101:first
     container_name: quorum_election_commision
     networks:
       quorum_net:
@@ -32,7 +32,7 @@ services:
       - 9001:9001
   quorum_2:
     hostname: 172.10.1.2
-    container_name: quorum_booth1
+    image: dockeronetwothree/quorum_101:first
     build: ./quorum_cluster/quorum
     networks:
       quorum_net:
@@ -55,7 +55,7 @@ services:
       - ./quorum2_data:/quorum
   quorum_3:
     hostname: 172.10.1.3
-    build: ./quorum_cluster/quorum
+    image: dockeronetwothree/quorum_101:first
     container_name: quorum_booth2
     networks:
       quorum_net:
