@@ -58,7 +58,7 @@
                     <execution>
                         <configuration>
                             <packageName>thoughtworks.quorum.clientapi.contract</packageName>
-                            <sourceDestination>${project.basedir}/src/main/java/thoughtworks/quorum/clientapi/contract/</sourceDestination>
+                            <sourceDestination>${project.basedir}/src/main/java/</sourceDestination>
                             <nativeJavaType>true</nativeJavaType>
                             <soliditySourceFiles>
                                 <directory>${project.basedir}/src/main/resources/</directory>
