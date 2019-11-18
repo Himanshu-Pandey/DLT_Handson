@@ -8,10 +8,16 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.quorum.Quorum;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class Web3jService {
+
+    private Map<String, Admin> admins = new HashMap<>();
+    private Map<String, Quorum> quorums = new HashMap<>();
+    private Map<String, String> accounts = new HashMap<>();
 
     @Autowired
     Quorum quorum;

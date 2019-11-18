@@ -14,7 +14,7 @@ services:
     networks:
       quorum_net:
         ipv4_address: '172.10.1.1'
-    volumes: 
+    volumes:
       - ./quorum1_data:/quorum
     environment:
       - CONSTELLATION_KEY={"data":{"bytes":"K+oYSvXKHsFYX9zkChMIDYSADj9VxBygMqm+t0Ag2l4="},"type":"unlocked"}
@@ -49,7 +49,7 @@ services:
       - 24002:22000
       - 8547:8546
       - 9002:9001
-    volumes: 
+    volumes:
       - ./quorum2_data:/quorum
   quorum_3:
     hostname: 172.10.1.3
@@ -74,10 +74,8 @@ services:
   api:
     build: ./client-api/
     container_name: api
-    # depends_on:
-    #   - quorum_3
     networks:
         quorum_net:
-          ipv4_address: '172.13.1.10'
+          ipv4_address: '172.10.1.4'
     ports:
         - 8080:8080

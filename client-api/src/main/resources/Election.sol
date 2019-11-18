@@ -18,7 +18,6 @@ contract Election {
     }
 
     function getVotesFor(uint8 party) public view returns (uint8) {
-        require(!hasVoted[msg.sender]);
         return votes[party];
     }
 }

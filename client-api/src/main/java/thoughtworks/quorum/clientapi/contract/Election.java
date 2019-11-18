@@ -3,7 +3,6 @@ package thoughtworks.quorum.clientapi.contract;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
@@ -11,6 +10,7 @@ import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
@@ -23,20 +23,15 @@ import org.web3j.tx.gas.ContractGasProvider;
  * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 4.3.0.
+ * <p>Generated with web3j version 4.5.6.
  */
+@SuppressWarnings("rawtypes")
 public class Election extends Contract {
-    private static final String BINARY = "0x608060405234801561001057600080fd5b50600260208190527fe90b7bceb6e7df5418fb78d8ee546e97c83a08bbccc01a0644d599ccd2a7c2e0805460ff1990811690915560009182527f679795a0195a1b76cdebb7c51d74e058aee92919b8c3389af86ef24535e8a28c805490911690558054600160a060020a03191633179055610160806100906000396000f30060806040526004361061004b5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663b3f98adc8114610050578063fe747b901461006d575b600080fd5b34801561005c57600080fd5b5061006b60ff6004351661009e565b005b34801561007957600080fd5b5061008860ff600435166100fe565b6040805160ff9092168252519081900360200190f35b3360009081526001602052604090205460ff16156100bb57600080fd5b60ff90811660009081526002602090815260408083208054808616600190810190961660ff19918216179091553384529184905290912080549091169091179055565b3360009081526001602052604081205460ff161561011b57600080fd5b5060ff90811660009081526002602052604090205416905600a165627a7a72305820b678c37b44c4ed1d145835c63c2430f0bb00b2f26a6a87ebfa822a09e7a3674d0029";
+    private static final String BINARY = "608060405234801561001057600080fd5b50600260208190527fe90b7bceb6e7df5418fb78d8ee546e97c83a08bbccc01a0644d599ccd2a7c2e0805460ff1990811690915560009182527f679795a0195a1b76cdebb7c51d74e058aee92919b8c3389af86ef24535e8a28c805490911690558054600160a060020a03191633179055610142806100906000396000f30060806040526004361061004b5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663b3f98adc8114610050578063fe747b901461006d575b600080fd5b34801561005c57600080fd5b5061006b60ff6004351661009e565b005b34801561007957600080fd5b5061008860ff600435166100fe565b6040805160ff9092168252519081900360200190f35b3360009081526001602052604090205460ff16156100bb57600080fd5b60ff90811660009081526002602090815260408083208054808616600190810190961660ff19918216179091553384529184905290912080549091169091179055565b60ff90811660009081526002602052604090205416905600a165627a7a72305820836c045616ef91a5878ef38febbd0afdf55eab2f203daa58866a864095f6cc3d0029";
 
     public static final String FUNC_VOTE = "vote";
 
     public static final String FUNC_GETVOTESFOR = "getVotesFor";
-
-    protected static final HashMap<String, String> _addresses;
-
-    static {
-        _addresses = new HashMap<String, String>();
-    }
 
     @Deprecated
     protected Election(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
@@ -56,7 +51,7 @@ public class Election extends Contract {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
-    public RemoteCall<TransactionReceipt> vote(BigInteger selection) {
+    public RemoteFunctionCall<TransactionReceipt> vote(BigInteger selection) {
         final Function function = new Function(
                 FUNC_VOTE, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint8(selection)), 
@@ -64,7 +59,7 @@ public class Election extends Contract {
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteCall<BigInteger> getVotesFor(BigInteger party) {
+    public RemoteFunctionCall<BigInteger> getVotesFor(BigInteger party) {
         final Function function = new Function(FUNC_GETVOTESFOR, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint8(party)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint8>() {}));
@@ -105,13 +100,5 @@ public class Election extends Contract {
     @Deprecated
     public static RemoteCall<Election> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
         return deployRemoteCall(Election.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "");
-    }
-
-    protected String getStaticDeployedAddress(String networkId) {
-        return _addresses.get(networkId);
-    }
-
-    public static String getPreviouslyDeployedAddress(String networkId) {
-        return _addresses.get(networkId);
     }
 }
