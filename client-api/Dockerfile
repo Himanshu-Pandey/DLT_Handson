@@ -10,5 +10,5 @@ COPY ./src /app/src
 RUN MAVEN_OPTS=-Djansi.force=true ./mvnw -Dmaven.repo.local=/app/.mvn/repository compile \
     jar:jar spring-boot:repackage --batch-mode -Dstyle.color=always --activate-profiles dockerfile-build,no-coverage
 
-CMD java -jar /app/target/quorum-client-api.jar
+CMD sleep 10 && java -jar /app/target/quorum-client-api.jar
 

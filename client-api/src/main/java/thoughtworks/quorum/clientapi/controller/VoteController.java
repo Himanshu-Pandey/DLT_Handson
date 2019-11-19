@@ -18,10 +18,10 @@ public class VoteController {
     @Autowired
     Web3jService web3jService;
 
-    @RequestMapping("booth/{boothId}/user/{userId}/vote/{party}")
+    @RequestMapping("booth/{boothId}/user/{userId}/vote/{candidate}")
     @PostMapping
-    public ResponseEntity<String> castVote(@PathVariable String boothId, @PathVariable String userId, @PathVariable Integer party) throws Exception {
-        TransactionReceipt receipt = web3jService.loadContract(boothId,userId).vote(BigInteger.valueOf(party)).send();
+    public ResponseEntity<String> castVote(@PathVariable String boothId, @PathVariable String userId, @PathVariable Integer candidate) throws Exception {
+        TransactionReceipt receipt = web3jService.loadContract(boothId,userId).vote(BigInteger.valueOf(candidate)).send();
         return ResponseEntity.ok(new ObjectMapper().writeValueAsString(receipt));
     }
 }

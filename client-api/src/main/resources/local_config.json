@@ -44,3 +44,5 @@
     ]
   }
 }
+
+//{"booth1":{"host":"localhost","port":"24002","type":"BOOTH","constellationPubKey":"8QH4amW71rBaqRBYG88RUDb315n/6Uwxu23Z7AJK520=","accounts":[{"name":"JUHI","address":"0xc2d7cf95645d33006175b78989035c7c9061d3f9"},{"name":"MANALI","address":"0xa2951d23f20a95716a37b3cc849df67c5302d205"}]},"booth2":{"host":"localhost","port":"24003","type":"BOOTH","constellationPubKey":"lP/xh0l1asOZy8hk4LzeTEMrcgNzVWJmLDWVld8mx2U=","accounts":[{"name":"HIMANSHU","address":"0xd9794dbeb48ab17d6acc4ceb0be8755f11caa509"},{"name":"NAVDEEP","address":"0x82e3571a028b57c347cd423031a34f2e712927c1"}]},"EC":{"host":"localhost","port":"24001","type":"EC","constellationPubKey":"p6m2ZLsWrwUZ40LfkwCI38abGd5SVFIwiKQnrbcOCD4=","accounts":[{"name":"EC1","address":"0xe050f4397afa2d73cc00003f754405e5764010e7"}]}}

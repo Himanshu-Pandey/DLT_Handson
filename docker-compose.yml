@@ -36,6 +36,7 @@ services:
     networks:
       quorum_net:
         ipv4_address: '172.10.1.2'
+    container_name: quorum_booth1
     environment:
       - CONSTELLATION_KEY={"data":{"bytes":"VWdW9qu2aC/TGBP0oNncOcjaCAHvc04xFdH9ylmovrY="},"type":"unlocked"}
       - CONSTELLATION_PUB=8QH4amW71rBaqRBYG88RUDb315n/6Uwxu23Z7AJK520=
@@ -77,6 +78,10 @@ services:
     hostname: 172.10.1.4
     build: ./client-api/
     container_name: api
+    depends_on: 
+      - quorum_1
+      - quorum_2
+      - quorum_3
     networks:
         quorum_net:
           ipv4_address: '172.10.1.4'

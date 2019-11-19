@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import thoughtworks.quorum.clientapi.contract.Election;
 import thoughtworks.quorum.clientapi.service.Web3jService;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -20,20 +20,21 @@ public class ElectionCommissionController {
 
     @RequestMapping("/election-commission/{boothId}/voters")
     @GetMapping
-    public ResponseEntity<List<String>> getAllUserAccounts(@PathVariable String boothId) throws IOException {
+    public ResponseEntity<List<String>> getAllUserAccounts(@PathVariable String boothId) {
         return ResponseEntity.ok(web3jService.getAccounts(boothId));
     }
 
     @RequestMapping("/election-commission/results")
     @GetMapping
     public ResponseEntity getWinner() throws Exception {
-        BigInteger party1Votes = web3jService.loadContract("EC", "EC1").getVotesFor(BigInteger.valueOf(1)).send();
-        BigInteger party2Votes = web3jService.loadContract("EC", "EC1").getVotesFor(BigInteger.valueOf(2)).send();
-        switch (party1Votes.compareTo(party2Votes)) {
+        Election electionContract = web3jService.loadContract("EC", "EC1");
+        BigInteger candidate1Votes = electionContract.getVotesFor(BigInteger.valueOf(1)).send();
+        BigInteger candidate2Votes = electionContract.getVotesFor(BigInteger.valueOf(2)).send();
+        switch (candidate1Votes.compareTo(candidate2Votes)) {
             case 1:
-                return ResponseEntity.ok().body("Party 1 is the winner");
+                return ResponseEntity.ok().body("candidate 1 is the winner");
             case -1:
-                return ResponseEntity.ok().body("Party 2 is the winner");
+                return ResponseEntity.ok().body("candidate 2 is the winner");
             default:
                 return ResponseEntity.ok().body("Both Are winner");
         }
