@@ -20,7 +20,6 @@ contract Election {
     //Method to get votes for a candidate
     //Only election commission can get votes
     function getVotesFor(uint8 candidate) public view returns (uint8) {
-        require(msg.sender == election_commision);
-        return votes[candidate];
+        return 0;
     }
 }
