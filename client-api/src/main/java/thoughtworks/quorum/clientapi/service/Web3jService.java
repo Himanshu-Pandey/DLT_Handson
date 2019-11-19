@@ -9,23 +9,23 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.quorum.Quorum;
 import org.web3j.quorum.tx.ClientTransactionManager;
 import org.web3j.utils.Async;
+import thoughtworks.quorum.clientapi.config.PodConfiguration;
+import thoughtworks.quorum.clientapi.config.PodConnectionHolder;
 import thoughtworks.quorum.clientapi.contract.Election;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static thoughtworks.quorum.clientapi.service.PodType.EC;
 
 @Service
 public class Web3jService {
 
+    public static final String EC = "EC";
     private Admin admin;
 
     @Value("${quorum.constellation.pub.key1}")
@@ -63,14 +63,10 @@ public class Web3jService {
 
     private String electionAddress;
 
-    Map<String,String> userToAccountsMap = new HashMap<>();
+    private PodConnectionHolder podConnectionHolder;
 
-    public Web3jService() {
-        this.userToAccountsMap.put("ec","0xe050f4397afa2d73cc00003f754405e5764010e7");
-        this.userToAccountsMap.put("manali","0xc2d7cf95645d33006175b78989035c7c9061d3f9");
-        this.userToAccountsMap.put("juhi","0xa2951d23f20a95716a37b3cc849df67c5302d205");
-        this.userToAccountsMap.put("navdeep","0xd9794dbeb48ab17d6acc4ceb0be8755f11caa509");
-        this.userToAccountsMap.put("himanshu","0x82e3571a028b57c347cd423031a34f2e712927c1");
+    public Web3jService(PodConnectionHolder podConnectionHolder) {
+        this.podConnectionHolder = podConnectionHolder;
     }
 
     @PostConstruct
@@ -90,24 +86,15 @@ public class Web3jService {
     }
 
     public Election loadContract(String boothId, String userId) {
-        Election election = Election.load(electionAddress, this.admin, getPrivateTransactionManagerForNodeAndEC(boothId, userId), BigInteger.valueOf(gasPrice),
+        ScheduledExecutorService scheduledExecutorService = Async.defaultExecutorService();
+        Admin admin1 = Admin.build(this.getHttpService(boothId), (long) this.rpcPollingInterval, scheduledExecutorService);
+        Election election = Election.load(electionAddress, admin1, getPrivateTransactionManagerForNodeAndEC(boothId, userId), BigInteger.valueOf(gasPrice),
                 BigInteger.valueOf(gasLimit));
 
-        return election;
+            return election;
     }
-
-    public HttpService getHttpService(String boothId) {
-        String quorumUrl = String.format("http://%s:%s", quorumHost, getQuorumPortForPod(boothId));
-        OkHttpClient okHttpClient = (new OkHttpClient.Builder()).connectTimeout((long) this.rpcConnectionTimeout, TimeUnit.MILLISECONDS).readTimeout((long) this.rpcReadTimeout, TimeUnit.MILLISECONDS).connectionSpecs(Arrays.asList(ConnectionSpec.CLEARTEXT)).build();
-        return new HttpService(quorumUrl, okHttpClient, false);
-    }
-
-    public Election getContract() {
-        return loadContract(EC.name(), userToAccountsMap.get(EC.toString()));
-    }
-
     public String getBlockNumber() {
-        Quorum quorum = Quorum.build(this.getHttpService(EC.name()));
+        Quorum quorum = Quorum.build(this.getHttpService(PodType.EC.name()));
         System.out.println(quorum);
         String blockNumber = "";
         try {
@@ -119,9 +106,8 @@ public class Web3jService {
     }
 
     public List<String> getAccounts(String boothId) {
-        String quorumUrl = String.format("http://%s:%s", quorumHost, getQuorumPortForPod(boothId));
+        String quorumUrl = podConnectionHolder.getQuorumUrl(boothId);
         Admin admin = Admin.build(new HttpService(quorumUrl));
-
         try {
             return admin.personalListAccounts().send().getAccountIds();
         } catch (IOException e) {
@@ -132,32 +118,21 @@ public class Web3jService {
     }
 
     private ClientTransactionManager getPrivateTransactionManagerForAllNodes(String boothId) {
-        String account = userToAccountsMap.get(EC.toString());
+        String account = podConnectionHolder.getAccountAddress(EC, "EC1");
         Quorum quorum = Quorum.build(this.getHttpService(boothId));
         return new ClientTransactionManager(quorum, account, Arrays.asList(booth1ConstellationPubKey, booth2ConstellationPubKey), 3, this.txMgrSleepDuration);
     }
 
     private ClientTransactionManager getPrivateTransactionManagerForNodeAndEC(String boothId, String userId) {
-        String account = userToAccountsMap.get(userId);
+        String accountAddress = podConnectionHolder.getAccountAddress(boothId, userId);
         Quorum quorum = Quorum.build(this.getHttpService(boothId));
-        return new ClientTransactionManager(quorum, account, Arrays.asList(electionCommisionConstellationPubKey), 3, this.txMgrSleepDuration);
+        PodConfiguration podConfigurationMap = podConnectionHolder.getPodConfigurationMap(EC);
+        return new ClientTransactionManager(quorum, accountAddress, Arrays.asList(podConfigurationMap.getConstellationPubKey()), 3, this.txMgrSleepDuration);
     }
 
-    private String getQuorumPortForPod(String boothId) {
-        String port = "24001";
-        PodType pd = PodType.valueOf(boothId.toUpperCase());
-        switch (pd) {
-            case EC:
-                port = "24001";
-                break;
-            case BOOTH1:
-                port = "24002";
-                break;
-            case BOOTH2:
-                port = "24003";
-                break;
-        }
-        return port;
+    public HttpService getHttpService(String boothId) {
+        String quorumUrl = podConnectionHolder.getQuorumUrl(boothId);
+        OkHttpClient okHttpClient = (new OkHttpClient.Builder()).connectTimeout((long) this.rpcConnectionTimeout, TimeUnit.MILLISECONDS).readTimeout((long) this.rpcReadTimeout, TimeUnit.MILLISECONDS).connectionSpecs(Arrays.asList(ConnectionSpec.CLEARTEXT)).build();
+        return new HttpService(quorumUrl, okHttpClient, false);
     }
-
 }

@@ -4,7 +4,8 @@ public enum PodType {
 
     EC("ec"),
     BOOTH1("booth1"),
-    BOOTH2("booth2");
+    BOOTH2("booth2"),
+    BOOTH("booth");
 
     private String name;
 

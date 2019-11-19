@@ -27,8 +27,8 @@ public class ElectionCommissionController {
     @RequestMapping("/election-commission/results")
     @GetMapping
     public ResponseEntity getWinner() throws Exception {
-        BigInteger party1Votes = web3jService.getContract().getVotesFor(BigInteger.valueOf(1)).send();
-        BigInteger party2Votes = web3jService.getContract().getVotesFor(BigInteger.valueOf(2)).send();
+        BigInteger party1Votes = web3jService.loadContract("EC", "EC1").getVotesFor(BigInteger.valueOf(1)).send();
+        BigInteger party2Votes = web3jService.loadContract("EC", "EC1").getVotesFor(BigInteger.valueOf(2)).send();
         switch (party1Votes.compareTo(party2Votes)) {
             case 1:
                 return ResponseEntity.ok().body("Party 1 is the winner");

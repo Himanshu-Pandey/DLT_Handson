@@ -33,7 +33,6 @@ services:
   quorum_2:
     hostname: 172.10.1.2
     image: dockeronetwothree/quorum_101:first
-    build: ./quorum_cluster/quorum
     networks:
       quorum_net:
         ipv4_address: '172.10.1.2'
@@ -75,6 +74,7 @@ services:
     volumes:
       - ./quorum3_data:/quorum
   api:
+    hostname: 172.10.1.4
     build: ./client-api/
     container_name: api
     networks:
