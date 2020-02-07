@@ -2,26 +2,46 @@ package thoughtworks.quorum.clientapi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import thoughtworks.quorum.clientapi.config.Account;
+import thoughtworks.quorum.clientapi.config.PodConnectionHolder;
 import thoughtworks.quorum.clientapi.contract.Election;
 import thoughtworks.quorum.clientapi.service.Web3jService;
 
 import java.math.BigInteger;
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
 public class ElectionCommissionController {
 
     @Autowired
     private Web3jService web3jService;
 
-    @RequestMapping("/election-commission/{boothId}/voters")
+    @Autowired
+    private PodConnectionHolder config;
+
+    @RequestMapping("/election-commission/{boothId}/voter-accounts")
     @GetMapping
     public ResponseEntity<List<String>> getAllUserAccounts(@PathVariable String boothId) {
         return ResponseEntity.ok(web3jService.getAccounts(boothId));
+    }
+
+    @RequestMapping("/election-commission/{boothId}/voters")
+    @GetMapping
+    public ResponseEntity<List<Account>> getAllVoters(@PathVariable String boothId) {
+        return ResponseEntity.ok(config.getPodConfigurationMap(boothId).getAccounts());
+    }
+
+    @RequestMapping("/election-commission/refresh")
+    @PostMapping
+    public ResponseEntity refresh() {
+        try {
+            web3jService.deployContract();
+            return ResponseEntity.ok("Done");
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @RequestMapping("/election-commission/results")

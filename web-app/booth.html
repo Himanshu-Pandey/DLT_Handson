@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <title>Election Commission | Voting Application</title>
+</head>
+
+<body>
+  <header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+      <div class="container d-flex justify-content-between">
+        <a href="/" class="navbar-brand d-flex align-items-center">
+          <strong>Voting Application</strong>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main role="main">
+    <section class="jumbotron text-center">
+      <div class="container">
+        <h1 class="jumbotron-heading">Booth <span id="spnBoothId"></span></h1>
+        <p class="lead text-muted">You can vote on behalf of any voter registered under this booth for any candidate.
+        </p>
+        <div class="row">
+          <div class="col-sm">
+          </div>
+          <div class="col-sm">
+            <span>
+              <div>
+                <span>Select Voter</span>
+                <select class="form-control" id="ddlVoters">
+                  <option>--Select Voter</option>
+                </select>
+              </div>
+              <div>
+                <span>Select Candidate</span>
+                <select class="form-control" id="ddlCandidates">
+                  <option>--Select Candidate</option>
+                  <option value="1">Party 1</option>
+                  <option value="2">Party 2</option>
+                </select>
+              </div>
+              <div>
+                <button type="button" class="btn btn-primary" disabled id="btnVote">Vote</button>
+              </div>
+            </span>
+          </div>
+          <div class="col-sm">
+          </div>
+        </div>
+        <div class="results"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="script.js"> </script>
+</body>
+
+</html>
