@@ -1,16 +1,17 @@
 $(document).ready(function () {
 
     const boothId = getUrlVars()["boothId"] || 'booth1';
+    const appAddress = 'http://localhost:8080';
 
     $('#call-result-api').click(function (event) {
-        $.get('http://localhost:8080/election-commission/results', (data) => {
+        $.get(`${appAddress}/election-commission/results`, (data) => {
             $(`<div class="alert alert-primary results" role="alert">
         ${data}
       </div>`).replaceAll($(".results"));
         });
     });
 
-    $.get(`http://localhost:8080/election-commission/booth${boothId}/voters`, (data) => {
+    $.get(`${appAddress}/election-commission/booth${boothId}/voters`, (data) => {
         data.forEach(element => {
             $(`<option value="${element.address}">${element.name}</option>`).appendTo("#ddlVoters");
         });
@@ -26,7 +27,7 @@ $(document).ready(function () {
         let selectedVoter = $('#ddlVoters :selected').text();
         let selectedCandidate = $('#ddlCandidates :selected').attr('value');
 
-        $.post(`http://localhost:8080/booth/booth${boothId}/user/${selectedVoter}/vote/${selectedCandidate}`, function (data) {
+        $.post(`${appAddress}/booth/booth${boothId}/user/${selectedVoter}/vote/${selectedCandidate}`, function (data) {
             $(`<div class="alert alert-primary results" role="alert" style="word-break: break-word;"><pre>${data.split(",").join("\n")}</pre></div>`).replaceAll($(".results"));
         }).fail(function (data) {
             $(`<div class="alert alert-danger results" role="alert">
@@ -36,7 +37,7 @@ $(document).ready(function () {
     });
 
     $('#lnkRefreshContract').click(() => {
-        $.post(`http://localhost:8080/election-commission/refresh`, function (data) {
+        $.post(`${appAddress}/election-commission/refresh`, function (data) {
             alert('Refresh update :' + data);
         }).fail(function (data) {
             alert('Refresh update :' + data);
